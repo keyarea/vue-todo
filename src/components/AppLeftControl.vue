@@ -4,11 +4,11 @@
       <div class="list-wrapper">
           <el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
                 <el-menu-item index="1">
-                    <i class="el-icon-menu"></i>
+                    <i class="el-icon-s-home"></i>
                     <span slot="title">今天</span>
                 </el-menu-item>
                 <el-menu-item index="2">
-                    <i class="el-icon-menu"></i>
+                    <i class="el-icon-date"></i>
                     <span slot="title">待办清单</span>
                 </el-menu-item>
            </el-menu>
@@ -82,7 +82,7 @@ export default {
     width: 300px;
     position: relative;
     background-color: #fff;
-    transition: all .2s;
+    transition: all .3s;
 }
 .left-control.collapse {
     flex: 0 0 64px;
@@ -122,7 +122,7 @@ export default {
     height: 48px;
     line-height: 48px;
     z-index: 1;
-    transition: all .2s;
+    transition: all .3s;
     background-color: #efefef;
 }
 </style>
