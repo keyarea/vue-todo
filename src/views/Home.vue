@@ -1,7 +1,7 @@
 <template>
   <el-container class="full-screen">
-    <el-aside>
-      <app-left-control></app-left-control>
+    <el-aside class="asider" :width="isCollapse ? '64px': '300px'">
+      <app-left-control v-model="isCollapse"></app-left-control>
     </el-aside>
     <el-container>
       <app-right-control></app-right-control>
@@ -18,6 +18,9 @@
     right: 0;
     bottom: 0;
 }
+.asider {
+  transition: all .2s;
+}
 </style>
 
 <script>
@@ -30,6 +33,11 @@ export default {
   components: {
     AppLeftControl,
     AppRightControl
+  },
+  data() {
+    return {
+      isCollapse: false,
+    }
   }
 }
 </script>
