@@ -1,6 +1,12 @@
 <template>
   <div class="left-control" :class="{'collapse': isCollapse}">
-      <div class="header-wrapper"></div>
+      <div class="header-wrapper">
+          <img src="../assets/imgs/default-avatar.png" alt="">
+          <span class="username-text">{{username}}</span>
+          <div class="header-btn">
+              <i class="el-icon-setting"></i>
+          </div>
+      </div>
       <div class="list-wrapper">
           <el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
                 <el-menu-item index="1">
@@ -68,6 +74,11 @@ export default {
       handleClose() {
 
       },
+  },
+  computed: {
+      username() {
+          return this.$store.state.app.username;
+      }
   }
 }
 </script>
@@ -105,6 +116,24 @@ export default {
     bottom: 48px;
     width: 100%;
     padding-bottom: 20px;
+}
+.left-control .header-wrapper img {
+    width: 40px;
+    height: 40px;
+}
+.left-control .header-wrapper .username-text {
+    margin-left: 8px;
+    flex: 1;
+    line-height: 40px;
+    font-size: 14px;
+}
+.left-control .header-wrapper .header-btn {
+    padding: 12px;
+    cursor: pointer;
+    transition: all .2s linear;
+}
+.left-control .header-wrapper .header-btn:hover {
+    transform: translate3d(0,-2px,0);
 }
 .left-control .list-wrapper .add-list-btn-wrapper {
     margin-top: 8px;
