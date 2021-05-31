@@ -31,6 +31,7 @@ export default {
     AppToDo,
   },
   methods: {
+    // 添加一个待办事项
     add(value) {
       console.log(value);
     }

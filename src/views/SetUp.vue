@@ -100,10 +100,13 @@ export default {
       },
       // 点击开始
       completeSetup() {
-          logger.debug(this.$store);
+          // 修改用户名
           this.$store.dispatch('app/setUserName', this.nickname);
+          // 修改用户初始化状态
           this.$store.dispatch('app/setInitFlag', true);
+          // 修改用户开始的时间
           this.$store.dispatch('app/setStartUsingDate', getTodayTime());
+          // 跳转到主页面
           this.$router.replace({name: 'Home'});
       }
   }

@@ -2,8 +2,8 @@
   <div class="left-control" :class="{'collapse': isCollapse}">
       <div class="header-wrapper">
           <img src="../assets/imgs/default-avatar.png" alt="">
-          <span class="username-text">{{username}}</span>
-          <div class="header-btn">
+          <span class="username-text" v-if="!isCollapse">{{username}}</span>
+          <div class="header-btn" v-if="!isCollapse">
               <i class="el-icon-setting"></i>
           </div>
       </div>
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'AppLeftControl',
   model: {
@@ -63,6 +64,9 @@ export default {
               }
           }
       },
+      username: function() {
+          console.log('值变了');
+      }
   },
   methods: {
       toggle() {
@@ -75,11 +79,7 @@ export default {
 
       },
   },
-  computed: {
-      username() {
-          return this.$store.state.app.username;
-      }
-  }
+  computed: mapState('app', ['username'])
 }
 </script>
 
@@ -93,7 +93,7 @@ export default {
     width: 300px;
     position: relative;
     background-color: #fff;
-    transition: all .3s;
+    transition: all .2s;
 }
 .left-control.collapse {
     flex: 0 0 64px;
@@ -151,7 +151,7 @@ export default {
     height: 48px;
     line-height: 48px;
     z-index: 1;
-    transition: all .3s;
+    transition: all .2s;
     background-color: #efefef;
 }
 </style>

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import SetUp from '../views/SetUp.vue'
+import Detail from '../views/Detail.vue'
 import store from '../store'
 // import {Logger} from '@/common/logger';
 
@@ -27,7 +28,14 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
-    meta: {requiredInit: true}
+    meta: {requiredInit: true},
+    children: [
+      {
+      path: 'detail/:id',
+      name: 'Detail',
+      component: Detail
+      }
+    ]
   }
 ]
 

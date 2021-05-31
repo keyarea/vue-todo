@@ -1,12 +1,16 @@
 <template>
   <el-container class="full-screen">
-    <el-aside class="asider" :width="isCollapse ? '64px': '300px'">
-      <app-left-control v-model="isCollapse"></app-left-control>
-    </el-aside>
+    <transition mode="out-in">
+      <el-aside class="asider" :width="isCollapse ? '64px': '300px'">
+        <app-left-control v-model="isCollapse"></app-left-control>
+      </el-aside>
+    </transition>
     <el-container>
       <app-right-control></app-right-control>
     </el-container>
-    <router-view></router-view>
+    <transition name="fade" mode="out-in">
+      <router-view></router-view>
+    </transition>
   </el-container>
 </template>
 
@@ -20,6 +24,17 @@
 }
 .asider {
   transition: all .2s;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: all .5s;
+}
+.fade-enter {
+  opacity: 0;
+  transform: translateX(450px);
+}
+.fade-leave-to {
+  opacity: 0;
+  transform: translateX(450px);
 }
 </style>
 

@@ -33,7 +33,7 @@ const actions = {
 // mutations
 const mutations = {
     setUserName(state, nickname) {
-        state.nickname = nickname;
+        state.username = nickname;
         write(USERNAME, nickname)
     },
     setInitFlag(state, flag) {
