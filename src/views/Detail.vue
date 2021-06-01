@@ -2,20 +2,20 @@
   <div class="detail" @click="cancel()">
     <div class="container" @click.stop>
       <div class="align-right">
-        <el-button type="success" icon="el-icon-check" circle></el-button>
-        <el-button type="danger" icon="el-icon-delete" circle></el-button>
+        <el-button type="success" icon="el-icon-check" circle @click="save"></el-button>
+        <el-button type="danger" icon="el-icon-delete" circle @click="destory"></el-button>
       </div>
       <div class="align-left">
-        <el-checkbox v-model="todo.done">标记完成</el-checkbox>
+        <el-checkbox v-model="todo.completedFlag">标记完成</el-checkbox>
       </div>
       <el-divider content-position="left">标题</el-divider>
-      <el-input></el-input>
+      <el-input v-model="todo.title"></el-input>
       <el-divider content-position="left">日期与提醒</el-divider>
       <div class="align-left">
         <div>
           截止时间：
           <el-date-picker
-            v-model="todo.startTime"
+            v-model="todo.dueAt"
             align="right"
             type="date"
             placeholder="选择日期"
@@ -26,7 +26,7 @@
           计划时间：
           <el-date-picker
             class="margin-top-10"
-            v-model="todo.endTime"
+            v-model="todo.planAt"
             type="datetime"
             placeholder="选择日期时间"
             align="right"
@@ -37,7 +37,7 @@
       <div class="margin-top-20 align-left">
         计划提醒：
         <el-switch
-          v-model="todo.remind"
+          v-model="todo.notifyMe"
           active-color="#13ce66"
           inactive-color="#ff4949">
         </el-switch>
@@ -48,7 +48,7 @@
           type="textarea"
           :rows="2"
           placeholder="待办详情"
-          v-model="todo.note">
+          v-model="todo.desc">
         </el-input>
       </div>
     </div>
@@ -57,27 +57,70 @@
 
 
 <script>
+import {Logger} from '@/common/logger'
+import { mapGetters } from 'vuex';
 // @ is an alias to /src
+
+const logger = new Logger('Detail');
 
 export default {
   name: 'Detail',
   components: {
   },
+  created() {
+    logger.debug('created');
+    const params = this.$route.params;
+    this._id = params.id;
+    this.todo = this.getData(this._id);
+  },
   data() {
     return {
+      _id: '',
       todo: {
-        done: false,
-        endTime: '',
-        startTime: '',
-        remind: true,
-        note: '',
+        _id: '',
+        title: '',
+        desc: '',
+        dueAt: '',
+        planAt: '',
+        notifyMe: false,
+        completedFlag: false,
       }
     }
   },
   methods: {
     cancel() {
       this.$router.push({name: 'Home'});
+    },
+    // 获取数据
+    getData(id) {
+      const todo = this.getTodo(id);
+      return {
+        _id: todo._id,
+        title: todo.title,
+        desc: todo.desc,
+        dueAt: todo.dueAt,
+        planAt: todo.planAt,
+        notifyMe: todo.notifyMe,
+        completedFlag: todo.completedFlag,
+      }
+    },
+    // 保存
+    save() {
+      this.$store.commit('todos/update', this.todo);
+      this.back();
+    },
+    // 删除该待办
+    destory() {
+      this.$store.commit('todos/destory', this._id);
+      this.back();
+    },
+    // 返回
+    back() {
+      this.$router.go(-1);
     }
+  },
+  computed: {
+    ...mapGetters('todos', ['getTodo'])
   }
 }
 </script>

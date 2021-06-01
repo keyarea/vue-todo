@@ -6,7 +6,7 @@
       <el-container class="list-wrapper">
         <app-to-do></app-to-do>
       </el-container>
-      <div class="quick-add-wrapper" :class="{'center': todos.length === 0}">
+      <div class="quick-add-wrapper" :class="{'center': isEmpty}">
         <app-quick-add @add="add"></app-quick-add>
       </div>
   </el-container>
@@ -17,12 +17,12 @@ import AppHeader from '@/components/AppHeader'
 import AppQuickAdd from '@/components/AppQuickAdd.vue'
 import AppToDo from '@/components/AppToDo.vue'
 import {Logger} from '@/common/logger'
+import { mapGetters } from 'vuex'
 const logger = new Logger('rightControl');
 export default {
   name: 'AppRightControl',
   data() {
     return {
-      todos: []
     }
   },
   props: {
@@ -38,6 +38,9 @@ export default {
       logger.debug(value);
       this.$store.dispatch('todos/insert', value);
     }
+  },
+  computed: {
+    ...mapGetters('todos', ['isEmpty'])
   }
 }
 </script>
