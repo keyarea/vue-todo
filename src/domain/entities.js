@@ -1,4 +1,4 @@
-import { generateUUID } from 'utils/uuid';
+import { generateUUID } from '@/utils/uuid';
 
 export class Todo {
   _id;
@@ -12,7 +12,7 @@ export class Todo {
   planAt;
   notifyMe;
 
-  constructor(title, listUUID) {
+  constructor({title, listUUID}) {
     this._id = generateUUID();
     this.title = title;
     this.listUUID = listUUID;

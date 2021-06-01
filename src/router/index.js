@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import SetUp from '../views/SetUp.vue'
 import Detail from '../views/Detail.vue'
+import Settings from '../views/Settings.vue'
 import store from '../store'
 // import {Logger} from '@/common/logger';
 
@@ -36,6 +37,12 @@ const routes = [
       component: Detail
       }
     ]
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: Settings,
+    meta: {requiredInit: true}
   }
 ]
 

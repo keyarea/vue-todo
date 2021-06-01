@@ -39,27 +39,33 @@
 </template>
 
 <script>
+import {Logger} from '@/common/logger'
+import { mapState } from 'vuex'
+
+const logger = new Logger('todo');
 export default {
   name: 'AppToDo',
   props: {
   },
   data() {
       return {
-          todoList: [
-              {
-                  title: '这是个啥',
-                  startTime: '2021-09-09',
-                  endTime: '2021-09-09',
-              }
-          ]
+          todoList: []
       }
+  },
+  watch: {
+    'selectedIndex': (value) => {
+      logger.debug(value);
+    }
   },
   methods: {
     handleEdit(index, row) {
-      console.log(index);
-      console.log(row);
+      logger.debug(index);
+      logger.debug(row);
       this.$router.push({path: 'home/detail/123'})
     }
+  },
+  computed: {
+    ...mapState('app', ['selectedIndex'])
   }
 }
 </script>

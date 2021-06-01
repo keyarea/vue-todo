@@ -4,11 +4,11 @@
           <img src="../assets/imgs/default-avatar.png" alt="">
           <span class="username-text" v-if="!isCollapse">{{username}}</span>
           <div class="header-btn" v-if="!isCollapse">
-              <i class="el-icon-setting"></i>
+              <i class="el-icon-setting" @click="toSettings"></i>
           </div>
       </div>
       <div class="list-wrapper">
-          <el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+          <el-menu :default-active="selectedIndex" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" @select="select">
                 <el-menu-item index="1">
                     <i class="el-icon-s-home"></i>
                     <span slot="title">今天</span>
@@ -17,24 +17,41 @@
                     <i class="el-icon-date"></i>
                     <span slot="title">待办清单</span>
                 </el-menu-item>
+                <template v-for="item in all">
+                    <el-menu-item :index="item._id" :key="item._id">
+                      <i class="el-icon-s-order"></i>
+                      <span slot="title">{{item.title}}</span>
+                    </el-menu-item>
+                </template>
            </el-menu>
            <div class="add-list-btn-wrapper">
                     <template v-if="isCollapse">
                             <el-button icon='el-icon-plus'></el-button>
                     </template>
                     <template v-else>
-                            <el-button icon='el-icon-plus'>新列表</el-button>
+                            <el-button icon='el-icon-plus' @click="newListDialogVisible = true">新列表</el-button>
                     </template>
            </div>
       </div>
       <div class="sider-trigger" :style="siderTriggerStyle" @click="toggle">
           <i :class="isCollapse ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
       </div>
+      <el-dialog title="添加新列表" :visible.sync="newListDialogVisible" width="30%" :modal-append-to-body='false'>
+        <el-input placeholder="列表名称" v-model="newListTitle"></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="newListDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="insert" :disabled="newListTitle == ''">确 定</el-button>
+        </span>
+      </el-dialog>
   </div>
 </template>
 
 <script>
+import {Logger} from '@/common/logger'
 import { mapState } from 'vuex'
+
+const logger = new Logger('appLeftControl');
+
 export default {
   name: 'AppLeftControl',
   model: {
@@ -48,7 +65,9 @@ export default {
       return {
           siderTriggerStyle: {
               width: '300px'
-          }
+          },
+          newListDialogVisible: false,
+          newListTitle: '',
       }
   },
   watch: {
@@ -69,6 +88,9 @@ export default {
       }
   },
   methods: {
+      created() {
+          logger.debug('created');
+      },
       toggle() {
           this.$emit('change', !this.isCollapse);
       },
@@ -78,8 +100,22 @@ export default {
       handleClose() {
 
       },
+      toSettings() {
+          this.$router.push({name: 'Settings'});
+      },
+      insert() {
+          this.$store.dispatch('lists/insert', this.newListTitle);
+          this.newListTitle = ''
+          this.newListDialogVisible = false;
+      },
+      select(index) {
+        this.$store.dispatch('app/setSelectedIndex', index);
+      }
   },
-  computed: mapState('app', ['username'])
+  computed: {
+      ...mapState('app', ['username', 'selectedIndex']),
+      ...mapState('lists', ['all'])
+  }
 }
 </script>
 
@@ -131,6 +167,7 @@ export default {
     padding: 12px;
     cursor: pointer;
     transition: all .2s linear;
+    font-size: 20px;
 }
 .left-control .header-wrapper .header-btn:hover {
     transform: translate3d(0,-2px,0);

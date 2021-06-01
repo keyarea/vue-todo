@@ -16,6 +16,8 @@
 import AppHeader from '@/components/AppHeader'
 import AppQuickAdd from '@/components/AppQuickAdd.vue'
 import AppToDo from '@/components/AppToDo.vue'
+import {Logger} from '@/common/logger'
+const logger = new Logger('rightControl');
 export default {
   name: 'AppRightControl',
   data() {
@@ -33,7 +35,8 @@ export default {
   methods: {
     // 添加一个待办事项
     add(value) {
-      console.log(value);
+      logger.debug(value);
+      this.$store.dispatch('todos/insert', value);
     }
   }
 }
