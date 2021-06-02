@@ -190,5 +190,6 @@ export default {
     z-index: 1;
     transition: all .2s;
     background-color: #efefef;
+    font-size: 20px;
 }
 </style>

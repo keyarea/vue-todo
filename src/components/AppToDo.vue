@@ -1,6 +1,6 @@
 <template>
   <div class="todo">
-      <el-table :data="list" stripe :show-header="false" current-row-key='_id'>
+      <el-table ref="multipleTable" :data="list" stripe :show-header="false" current-row-key='_id' @select="handleSelectionChange">
             <el-table-column
             type="selection"
             width="55">
@@ -15,7 +15,7 @@
                 >
                 <template slot-scope="scope">
                   <i class="el-icon-time"></i>
-                  <span style="margin-left: 10px">{{ scope.row.planAt }}</span>
+                  <span style="margin-left: 10px">{{ scope.row.planAt | dateFormat('YYYY年MM月DD日') }}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -23,7 +23,7 @@
                 >
                 <template slot-scope="scope">
                   <i class="el-icon-date"></i>
-                  <span style="margin-left: 10px">{{ scope.row.dueAt }}</span>
+                  <span style="margin-left: 10px">{{ scope.row.dueAt | dateFormat('YYYY年MM月DD日') }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="操作">
@@ -42,11 +42,17 @@
 <script>
 import {Logger} from '@/common/logger'
 import { mapGetters, mapState } from 'vuex'
+import * as _ from 'lodash'
 
 const logger = new Logger('todo');
 export default {
   name: 'AppToDo',
   props: {
+  },
+  mounted() {
+    this.list.forEach((todo, index) => {
+      this.$refs.multipleTable.toggleRowSelection(todo, todo.completedFlag);
+    })
   },
   data() {
       return {
@@ -56,11 +62,39 @@ export default {
   watch: {
     'selectedIndex': (value) => {
       logger.debug(value);
+    },
+    'list': function(todos) {
+      logger.debug('watch list: %o', todos)
+      this.$nextTick(() => {
+        this.list.forEach((todo, index) => {
+          this.$refs.multipleTable.toggleRowSelection(todo, todo.completedFlag);
+        })
+      })
     }
   },
   methods: {
     handleEdit(row) {
       this.$router.push({path: `home/detail/${row._id}`})
+    },
+    handleSelectionChange(val) {
+      // 全部选中的
+      const list = this.list.filter(todo => todo.completedFlag);
+      let different = [];
+      let flag;
+      // 长度比较
+      if (val.length > list.length) {
+        // 代表新选中了元素
+        different  = _.difference(val, list);
+        flag = true;
+      } else {
+        // 代表有元素被取消选择
+        different  = _.difference(list, val);
+        flag = false;
+      }
+      // logger.debug(different);
+      // 找到差异
+      const updatedTodo = different[0];
+      this.$store.commit('todos/updateCompletedFlag', {id: updatedTodo._id, flag})
     }
   },
   computed: {

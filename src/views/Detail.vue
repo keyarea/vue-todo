@@ -6,10 +6,10 @@
         <el-button type="danger" icon="el-icon-delete" circle @click="destory"></el-button>
       </div>
       <div class="align-left">
-        <el-checkbox v-model="todo.completedFlag">标记完成</el-checkbox>
+        <el-checkbox v-model="todo.completedFlag" @change="completedFlagChange">标记完成</el-checkbox>
       </div>
       <el-divider content-position="left">标题</el-divider>
-      <el-input v-model="todo.title"></el-input>
+      <el-input v-model="todo.title" :disabled="todo.completedFlag"></el-input>
       <el-divider content-position="left">日期与提醒</el-divider>
       <div class="align-left">
         <div>
@@ -19,6 +19,7 @@
             align="right"
             type="date"
             placeholder="选择日期"
+            :disabled="todo.completedFlag"
             >
           </el-date-picker>
         </div>
@@ -30,6 +31,7 @@
             type="datetime"
             placeholder="选择日期时间"
             align="right"
+            :disabled="todo.completedFlag"
             >
           </el-date-picker>
         </div>
@@ -39,7 +41,9 @@
         <el-switch
           v-model="todo.notifyMe"
           active-color="#13ce66"
-          inactive-color="#ff4949">
+          inactive-color="#ff4949"
+          :disabled="todo.completedFlag"
+          >
         </el-switch>
       </div>
       <el-divider content-position="left">更多</el-divider>
@@ -48,7 +52,9 @@
           type="textarea"
           :rows="2"
           placeholder="待办详情"
-          v-model="todo.desc">
+          v-model="todo.desc"
+          :disabled="todo.completedFlag"
+          >
         </el-input>
       </div>
     </div>
@@ -117,6 +123,9 @@ export default {
     // 返回
     back() {
       this.$router.go(-1);
+    },
+    completedFlagChange(value) {
+      
     }
   },
   computed: {
